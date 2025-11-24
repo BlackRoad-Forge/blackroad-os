@@ -9,8 +9,9 @@ module.exports = function calculateEmojiStats(reactions = []) {
     total: 0,
   };
 
-  reactions.forEach(({ content }) => {
-    if (stats.hasOwnProperty(content)) {
+  reactions.forEach((reaction) => {
+    const content = reaction?.content;
+    if (content && content in stats) {
       stats[content]++;
       stats.total++;
     }

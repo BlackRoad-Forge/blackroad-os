@@ -82,4 +82,19 @@ describe("calculateEmojiStats", () => {
     expect(result.report["✅"]).toBe("67%"); // 2/3 = 66.67% rounded
     expect(result.report["❌"]).toBe("33%"); // 1/3 = 33.33% rounded
   });
+
+  it("handles reactions with missing content property", () => {
+    const reactionsWithMissing = [
+      { content: "✅" },
+      {}, // missing content
+      { content: "❌" },
+      { otherProp: "value" }, // different property
+    ];
+
+    const result = calculateEmojiStats(reactionsWithMissing);
+
+    expect(result.total).toBe(2);
+    expect(result.confirmed).toBe(1);
+    expect(result.blocked).toBe(1);
+  });
 });
