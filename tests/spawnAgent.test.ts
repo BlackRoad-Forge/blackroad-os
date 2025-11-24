@@ -42,7 +42,7 @@ describe("spawn-agent.js", () => {
     ];
     for (const d of dirs) {
       if (fs.existsSync(d) && fs.readdirSync(d).length === 0) {
-        fs.rmdirSync(d);
+        fs.rmSync(d, { recursive: true });
       }
     }
   });
@@ -81,13 +81,13 @@ describe("spawn-agent.js", () => {
     expect(fs.existsSync(promptPath)).toBe(true);
     const promptContent = fs.readFileSync(promptPath, "utf-8");
     expect(promptContent).toContain("SYSTEM:");
-    expect(promptContent).toContain(TEST_AGENT_NAME);
+    expect(promptContent).toContain("Test Agent Xyz");
 
     // Check workflow file
     const workflowPath = path.join(ROOT_DIR, ".github", "workflows", `${TEST_AGENT_NAME}.workflow.yml`);
     expect(fs.existsSync(workflowPath)).toBe(true);
     const workflowContent = fs.readFileSync(workflowPath, "utf-8");
-    expect(workflowContent).toContain(`name: ${TEST_AGENT_NAME} Workflow`);
+    expect(workflowContent).toContain("name: Test Agent Xyz Workflow");
     expect(workflowContent).toContain("workflow_dispatch");
 
     // Check docs file
