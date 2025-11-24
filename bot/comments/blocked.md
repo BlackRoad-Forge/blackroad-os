@@ -1,4 +1,4 @@
 > ❌ Progress halted  
 > Cause: {{cause}}  
-> Owner: 🧍‍♀️ `@alexa`  
+> Owner: 🧍‍♀️ `{{owner}}`  
 > Escalate by reacting 🛟 or tag `@guardian-agent`  
