@@ -16,10 +16,6 @@ jobs:
         with:
           node-version: 18
 
-      - name: 📦 Install Dependencies
-        run: npm install
-        working-directory: ./bot
-
       - name: 🚦 Run Emoji Bot Handler
         run: node index.js
         working-directory: ./bot
