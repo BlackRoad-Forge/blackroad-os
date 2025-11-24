@@ -37,7 +37,7 @@ export function loadManifest(customPath?: string): Manifest {
   const data = yaml.load(raw)
   const parsed = ManifestSchema.safeParse(data)
   if (!parsed.success) {
-    const formatted = parsed.error.errors.map((err) => `${err.path.join('.')}: ${err.message}`)
+    const formatted = parsed.error.errors.map((err) => `${err.path.length ? err.path.join('.') : 'root'}: ${err.message}`)
     throw new Error(`Invalid orchestra.yml\n${formatted.join('\n')}`)
   }
   return parsed.data
