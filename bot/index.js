@@ -6,9 +6,6 @@ const event = process.env.GITHUB_EVENT_PATH;
 const fs = require("fs");
 const { updateProjectField, getIssueNodeId } = require("./handlers/project-graphql-updater");
 
-// Load configuration
-const configPath = process.env.EMOJI_BOT_CONFIG || "../emoji-bot-config.yml";
-
 // Mapping of reaction content to status updates
 const REACTION_TO_STATUS = {
   eyes: "Done",

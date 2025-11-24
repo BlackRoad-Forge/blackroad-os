@@ -107,16 +107,21 @@ async function getIssueNodeId(owner, repo, issueNumber) {
 
 /**
  * Fetches project fields and their options.
+ * Supports both user and organization projects.
+ * @param {string} owner - The user or organization login
+ * @param {number} projectNumber - The project number
+ * @param {boolean} isOrg - Whether the owner is an organization (default: false)
  */
-async function getProjectFields(owner, projectNumber) {
+async function getProjectFields(owner, projectNumber, isOrg = false) {
   const token = process.env.GITHUB_TOKEN;
   if (!token) {
     throw new Error("GITHUB_TOKEN environment variable is not set");
   }
 
+  const ownerType = isOrg ? "organization" : "user";
   const query = `
     query GetProjectFields($owner: String!, $projectNumber: Int!) {
-      user(login: $owner) {
+      ${ownerType}(login: $owner) {
         projectV2(number: $projectNumber) {
           id
           fields(first: 20) {
@@ -162,7 +167,7 @@ async function getProjectFields(owner, projectNumber) {
     throw new Error(`GraphQL errors: ${JSON.stringify(data.errors)}`);
   }
 
-  return data.data.user.projectV2;
+  return data.data[ownerType].projectV2;
 }
 
 module.exports = {

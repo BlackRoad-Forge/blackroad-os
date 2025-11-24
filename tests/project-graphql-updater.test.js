@@ -110,7 +110,7 @@ describe("project-graphql-updater", () => {
   });
 
   describe("getProjectFields", () => {
-    it("should fetch project fields successfully", async () => {
+    it("should fetch project fields for user successfully", async () => {
       const mockProject = {
         id: "project-123",
         fields: {
@@ -133,7 +133,35 @@ describe("project-graphql-updater", () => {
 
       const { getProjectFields } = await import("../bot/handlers/project-graphql-updater.js");
 
-      const result = await getProjectFields("BlackRoad-OS", 1);
+      const result = await getProjectFields("BlackRoad-OS", 1, false);
+
+      expect(result).toEqual(mockProject);
+    });
+
+    it("should fetch project fields for organization successfully", async () => {
+      const mockProject = {
+        id: "org-project-123",
+        fields: {
+          nodes: [
+            { id: "field-1", name: "Status", options: [{ id: "opt-1", name: "Done" }] },
+          ],
+        },
+      };
+
+      mockFetch.mockResolvedValueOnce({
+        ok: true,
+        json: async () => ({
+          data: {
+            organization: {
+              projectV2: mockProject,
+            },
+          },
+        }),
+      });
+
+      const { getProjectFields } = await import("../bot/handlers/project-graphql-updater.js");
+
+      const result = await getProjectFields("BlackRoad-OS", 1, true);
 
       expect(result).toEqual(mockProject);
     });

@@ -7,6 +7,9 @@
 
 /**
  * Fetches issues with reaction data from the repository.
+ * @param {string} owner - Repository owner (username or organization)
+ * @param {string} repo - Repository name
+ * @param {string} since - ISO 8601 date string to filter issues updated since this date
  */
 async function fetchIssuesWithReactions(owner, repo, since) {
   const token = process.env.GITHUB_TOKEN;
