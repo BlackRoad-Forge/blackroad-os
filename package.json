@@ -14,7 +14,8 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "test": "vitest run",
-    "build": "tsc --noEmit",
+    "typecheck": "tsc --noEmit",
+    "build": "tsc",
     "postbuild": "tsx scripts/postbuild.ts",
     "br-orchestrate": "tsx src/cli.ts"
   },
