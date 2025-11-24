@@ -1,0 +1,19 @@
+{
+  "id": "guardian-clone-vault",
+  "role": "sentinel",
+  "traits": ["incident-response", "triage", "overflow"],
+  "ttl": "96h",
+  "inheritsFrom": "guardian-agent",
+  "metadata": {
+    "createdBy": "lucidia.spawn-runner.js",
+    "reason": "Auto-spawned to support main guardian-agent during short-term escalation storm",
+    "escalationsLogged": 18,
+    "escalationPeriod": "72h",
+    "parentLoadCapacity": "85%"
+  },
+  "config": {
+    "autoDeactivate": true,
+    "deactivateAfter": "96h",
+    "manualExtendable": true
+  }
+}

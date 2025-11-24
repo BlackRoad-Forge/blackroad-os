@@ -1,3 +1,10 @@
 node_modules
 coverage
 
+# TypeScript build output (not tracked, compiled from .ts files)
+src/**/*.js
+app/**/*.js
+lib/**/*.js
+components/**/*.js
+tests/**/*.js
+vitest.config.js
