@@ -318,6 +318,8 @@ export function main(): void {
 }
 
 // Run CLI if executed directly
-if (require.main === module) {
+// Using dynamic check that works with both CommonJS and tsx/ts-node
+const isMain = typeof require !== "undefined" && require.main === module;
+if (isMain) {
   main();
 }
