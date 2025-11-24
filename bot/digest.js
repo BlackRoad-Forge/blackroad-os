@@ -307,6 +307,8 @@ function processActivityData(data) {
   const issues = repo.issues.nodes;
   
   // Filter PRs to only include those from the past week
+  // Note: GitHub GraphQL API doesn't support filterBy.since for pullRequests like it does for issues,
+  // so we filter in JavaScript instead
   const oneWeekAgo = getOneWeekAgo();
   const pullRequests = repo.pullRequests.nodes.filter((pr) => {
     const createdAt = new Date(pr.createdAt);
