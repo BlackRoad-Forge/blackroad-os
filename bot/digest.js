@@ -1,9 +1,6 @@
 // bot/digest.js
 // Codex Digest Agent - interprets emoji digests and weekly stats
 
-const fs = require("fs");
-const path = require("path");
-
 /**
  * Codex Digest Agent
  * Role: Interpreter
