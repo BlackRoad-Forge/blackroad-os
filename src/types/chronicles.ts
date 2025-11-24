@@ -73,17 +73,24 @@ export function createEpisodeId(episodeNumber: number): string {
 
 /** Formats episode for PR comment digest */
 export function formatEpisodeDigest(episode: ChronicleEpisode): string {
+  const details = [
+    episode.agentDesignation && `Agent Designation: \`${episode.agentDesignation}\``,
+    episode.triggerEvent && `Trigger: ${episode.triggerEvent}`,
+    episode.ttl && `TTL: ${episode.ttl}`,
+    episode.commander && `Awaiting confirmation from Commander ${episode.commander}`,
+  ].filter(Boolean);
+
+  const detailsBlock = details.length > 0
+    ? details.map((d) => `> ${d}`).join("\n")
+    : "";
+
   return `
 ## 🎙️ ${episode.series}: ${episode.subtitle}
 
 ### ${episode.title}
 
 > **Narrated by ${episode.narrator}**
->
-> ${episode.agentDesignation ? `Agent Designation: \`${episode.agentDesignation}\`` : ""}
-> ${episode.triggerEvent ? `Trigger: ${episode.triggerEvent}` : ""}
-> ${episode.ttl ? `TTL: ${episode.ttl}` : ""}
-> ${episode.commander ? `Awaiting confirmation from Commander ${episode.commander}` : ""}
+${detailsBlock}
 
 📅 ${episode.date} | ⏱️ ${episode.duration}
 

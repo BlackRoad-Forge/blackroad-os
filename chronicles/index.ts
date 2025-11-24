@@ -37,9 +37,10 @@ export function getEpisodeById(id: string): ChronicleEpisode | undefined {
   return episodes.find((ep) => ep.id === id);
 }
 
-/** Get latest episode */
+/** Get latest episode (sorted by ID for guaranteed ordering) */
 export function getLatestEpisode(): ChronicleEpisode | undefined {
-  return episodes[episodes.length - 1];
+  if (episodes.length === 0) return undefined;
+  return [...episodes].sort((a, b) => b.id.localeCompare(a.id))[0];
 }
 
 /** Get episodes by tag */

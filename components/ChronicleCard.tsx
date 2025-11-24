@@ -7,12 +7,17 @@ interface ChronicleCardProps {
   onViewTranscript?: () => void;
 }
 
-const statusColors: Record<ChronicleStatus, string> = {
-  "awaiting-confirmation": "#f59e0b", // amber
-  "active": "#10b981", // green
-  "completed": "#3b82f6", // blue
-  "archived": "#6b7280", // gray
-  "expired": "#ef4444", // red
+interface StatusStyle {
+  color: string;
+  backgroundColor: string;
+}
+
+const statusStyles: Record<ChronicleStatus, StatusStyle> = {
+  "awaiting-confirmation": { color: "#f59e0b", backgroundColor: "rgba(245, 158, 11, 0.12)" },
+  "active": { color: "#10b981", backgroundColor: "rgba(16, 185, 129, 0.12)" },
+  "completed": { color: "#3b82f6", backgroundColor: "rgba(59, 130, 246, 0.12)" },
+  "archived": { color: "#6b7280", backgroundColor: "rgba(107, 114, 128, 0.12)" },
+  "expired": { color: "#ef4444", backgroundColor: "rgba(239, 68, 68, 0.12)" },
 };
 
 const statusLabels: Record<ChronicleStatus, string> = {
@@ -23,15 +28,24 @@ const statusLabels: Record<ChronicleStatus, string> = {
   "expired": "⏰ Expired",
 };
 
+const baseButtonStyle: React.CSSProperties = {
+  flex: 1,
+  padding: "10px 16px",
+  borderRadius: "8px",
+  cursor: "pointer",
+  fontSize: "14px",
+  fontWeight: 500,
+};
+
 export function ChronicleCard({ episode, onPlay, onViewTranscript }: ChronicleCardProps) {
-  const statusColor = statusColors[episode.status];
+  const statusStyle = statusStyles[episode.status];
   const statusLabel = statusLabels[episode.status];
 
   return (
     <div
       className="chronicle-card"
       style={{
-        border: `2px solid ${statusColor}`,
+        border: `2px solid ${statusStyle.color}`,
         borderRadius: "12px",
         padding: "20px",
         backgroundColor: "#0d1117",
@@ -72,8 +86,8 @@ export function ChronicleCard({ episode, onPlay, onViewTranscript }: ChronicleCa
           display: "inline-block",
           padding: "4px 12px",
           borderRadius: "16px",
-          backgroundColor: `${statusColor}20`,
-          color: statusColor,
+          backgroundColor: statusStyle.backgroundColor,
+          color: statusStyle.color,
           fontSize: "12px",
           fontWeight: 500,
           marginBottom: "16px",
@@ -128,15 +142,10 @@ export function ChronicleCard({ episode, onPlay, onViewTranscript }: ChronicleCa
         <button
           onClick={onPlay}
           style={{
-            flex: 1,
-            padding: "10px 16px",
-            borderRadius: "8px",
+            ...baseButtonStyle,
             border: "none",
             backgroundColor: "#238636",
             color: "#ffffff",
-            cursor: "pointer",
-            fontSize: "14px",
-            fontWeight: 500,
           }}
         >
           ▶️ Play Episode
@@ -144,15 +153,10 @@ export function ChronicleCard({ episode, onPlay, onViewTranscript }: ChronicleCa
         <button
           onClick={onViewTranscript}
           style={{
-            flex: 1,
-            padding: "10px 16px",
-            borderRadius: "8px",
+            ...baseButtonStyle,
             border: "1px solid #30363d",
             backgroundColor: "transparent",
             color: "#c9d1d9",
-            cursor: "pointer",
-            fontSize: "14px",
-            fontWeight: 500,
           }}
         >
           📜 Transcript
