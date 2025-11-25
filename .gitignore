@@ -24,3 +24,6 @@ dist
 # Generated JS files from TypeScript
 *.js
 !bot/**/*.js
+# Generated JS files (source is TypeScript)
+*.js
+!vitest.config.js
