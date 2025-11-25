@@ -1,0 +1,107 @@
+using UnityEngine;
+using BlackRoad.Worldbuilder.Interaction;
+using BlackRoad.Worldbuilder.Items;
+
+namespace BlackRoad.Worldbuilder.Life
+{
+    /// <summary>
+    /// Allows the player to feed and "pet" critters.
+    /// Feeding uses items from the player's Inventory if available.
+    /// Petting increases trust only.
+    /// </summary>
+    public class CritterInteraction : Interactable
+    {
+        [Header("Needs & Behaviour")]
+        [SerializeField] private CritterNeeds needs;
+        [SerializeField] private CritterAgent agent;
+
+        [Header("Trust")]
+        [Range(0f, 1f)]
+        [SerializeField] private float trust = 0f;
+        [SerializeField] private float trustIncreaseOnPet = 0.1f;
+        [SerializeField] private float trustIncreaseOnFeed = 0.15f;
+
+        [Header("Visual Feedback")]
+        [SerializeField] private Color feedColor = Color.green;
+        [SerializeField] private Color petColor = Color.cyan;
+
+        public float Trust => trust;
+
+        private void Awake()
+        {
+            if (needs == null)
+                needs = GetComponent<CritterNeeds>();
+            if (agent == null)
+                agent = GetComponent<CritterAgent>();
+        }
+
+        public override void Interact(GameObject interactor)
+        {
+            var inventory = interactor.GetComponent<Inventory>();
+
+            // If hungry and we have inventory & food, feed
+            if (needs != null && needs.IsHungry && inventory != null)
+            {
+                var foodItem = inventory.GetAnyFoodItem();
+                if (foodItem != null && foodItem.IsFood)
+                {
+                    int removed = inventory.RemoveItem(foodItem, 1);
+                    if (removed > 0)
+                    {
+                        Feed(foodItem);
+                        return;
+                    }
+                }
+            }
+
+            // Otherwise just pet
+            Pet();
+        }
+
+        private void Feed(ItemDefinition item)
+        {
+            if (needs != null && item.IsFood)
+            {
+                // Use item nutrition to reduce hunger
+                float newHunger = Mathf.Clamp01(needs.Hunger - item.NutritionValue);
+                needs.SetHunger(newHunger);
+            }
+
+            trust = Mathf.Clamp01(trust + trustIncreaseOnFeed);
+            StartCoroutine(BobAnimation(feedColor));
+        }
+
+        private void Pet()
+        {
+            trust = Mathf.Clamp01(trust + trustIncreaseOnPet);
+            StartCoroutine(BobAnimation(petColor));
+        }
+
+        private System.Collections.IEnumerator BobAnimation(Color color)
+        {
+            Renderer rend = GetComponentInChildren<Renderer>();
+            Color original = rend != null ? rend.material.color : Color.white;
+
+            float t = 0f;
+            Vector3 basePos = transform.position;
+
+            while (t < 0.4f)
+            {
+                t += Time.deltaTime;
+                float bob = Mathf.Sin(t * Mathf.PI * 4f) * 0.05f;
+                transform.position = basePos + Vector3.up * bob;
+
+                if (rend != null)
+                {
+                    rend.material.color = Color.Lerp(original, color, t / 0.4f);
+                }
+
+                yield return null;
+            }
+
+            transform.position = basePos;
+            if (rend != null)
+                rend.material.color = original;
+        }
+    }
+}
