@@ -10,3 +10,4 @@ coverage
 # But keep the actual source .ts files
 !*.ts
 !*.tsx
+dist
