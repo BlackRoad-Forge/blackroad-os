@@ -1,0 +1,37 @@
+name: 📊 Digest-Bot – Weekly Summary
+
+on:
+  # Run every Monday at 9:00 AM UTC
+  schedule:
+    - cron: '0 9 * * 1'
+  
+  # Allow manual trigger for testing
+  workflow_dispatch:
+    inputs:
+      digest_issue:
+        description: 'Issue number to post digest to (overrides default)'
+        required: false
+        type: number
+
+jobs:
+  weekly-digest:
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+      contents: read
+    
+    steps:
+      - name: 🧬 Checkout Repo
+        uses: actions/checkout@v4
+
+      - name: 🧠 Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: 📊 Run Weekly Digest Bot
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          DIGEST_ISSUE: ${{ inputs.digest_issue || '' }}
+        run: node digest.js
+        working-directory: ./bot
