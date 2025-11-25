@@ -10,3 +10,5 @@
 export * from "./types";
 export { spawnAgent, saveAgent, main as spawnAgentCli } from "./spawn-agent";
 export { AgentBuilder, AgentRegistry, createAgent, getRegistry } from "./lucidia-agent-builder";
+export * from "./types";
+export * from "./loader";
